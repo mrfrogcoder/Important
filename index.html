@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>KO</title>
+</head>
+
+<body>
+The name is <span data-bind="text: personName"></span>
+</body>
+
+<script type='text/javascript' src='js/knockout-3.1.0.js'></script>
+<script>
+//View Model 
+var myViewModel = {
+	personName: 'Van',
+	personAge: 22
+};
+//load Model
+ko.applyBindings(myViewModel);
+
+</script>
+
+</html>
