@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>KO</title>
+    <link href="css/main.css" rel="Stylesheet" type="text/css" />
+</head>
+<body>
+
+    <div data-bind="template: { name: templatoUse , foreach: feature }"></div>
+
+
+
+    <script type="text/html" id="f4x4-template">
+        <h3 data-bind="text: title"></h3>
+        <p>Credits: <span data-bind="text: description"></span></p>
+
+    </script>
+
+
+    <script type="text/html" id="Script1">
+        <h3 data-bind="text: title"></h3>
+        <p>Credits: <span data-bind="text: description"></span></p>
+    </script>
+
+
+    <!--js assets!-->
+    <script type='text/javascript' src='js/knockout-3.1.0.js'></script>
+    <script type='text/javascript' src='js/main.js'></script>
+</body>
+</html>
