@@ -1,180 +1,65 @@
-var featuredContents = [
-    {
-        "id": 1,
-        "title": "Hello1",
-        "description": "Loremipsumdoloripsitlol",
-        "image": "./",
-        "counterL": 5,
-        "counterE": 3
-    },
-    {
-        "id": 2,
-        "title": "Hello2",
-        "description": "asdasdasdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 3,
-        "title": "Hello2",
-        "description": "Loremipsumdolorasdasdasdipsitlol",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 4,
-        "title": "Hello2",
-        "description": "asdasdsad",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 5,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 6,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 12312312312444,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 123123123,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 123123234444,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id":12312312313,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 12344123,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 333,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 123,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 4242,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    },
-    {
-        "id": 123,
-        "title": "Hello2",
-        "description": "asdasd",
-        "image": "./",
-        "counterL": 15,
-        "counterE": 30
-    }
-];
+var i = 0;
+var by3 = 3;
+var by4 = 4;
+var viewModelLoader = {
+    feature: ko.observableArray()
+};
 
-    var i = 0;
-    var by3 = 3;
-    var by4 = 4;
-    var viewModel = {
-        myMessage: ko.observable(), // Initially blank
-        price: ko.observable(400),
-        items: ['apple', 'banana', 'mango'],
-        buyer: { name: 'Franklin', credits: 250 },
-        seller: { name: 'Mario', credits: 5800 },
-        feature: ko.observableArray(featuredContents)
-    };
-
-
-
-    viewModel.templatoUse = function (item) {
-        var tmplName = 'f4x4-template';
-        i = i + 1;
-        /*
-        if (x < by3 && x != by4) {
-        console.log(item.id, true);
-        if (by3 == 3) {
-        by3 = by4;
+var myLoader = $("#myloader");
+function loadContent(dtype) {
+    $.ajax({
+        url: './ajax/loadmore.json',
+        dataType: 'json',
+        type: 'GET',
+        success: function (data) {
+            var content = "";
+            var by3 = "";
+            var by4 = "";
+            var myarr = [];
+            var xarray = [];
+            for (var i = 0; i < data.length; i++) {
+                if (i < 7) {
+                    if (i < 4) {
+                        //myarr.push($.extend(data[i], { "column": "by3" }));
+                        by4 += '<h3>' + data[i].title + '</h3><p>Credits: <span>' + data[i].description + '</span><button id="like">like</button></p>';
+                    } else {
+                        by3 += '<h3>' + data[i].title + '</h3><p>Credits: <span>' + data[i].description + '</span><button id="like">like</button></p>';
+                    }
+                }
+            }
+            content += "<div class='row' style='background: #ccc'>";
+            content += by4;
+            content += "</div>";
+            content += "<div class='row' style='background: #ddd'>";
+            content += by3;
+            content += "</div>";
+            if (dtype == 'html') {
+                myLoader.html(content);
+            } else {
+                $(content).insertBefore($("#loadMore"));
+                $("#loadMore button").attr('disabled', false);
+            }
         }
+    });
+}
+$(function () {
+    loadContent('html');
+    $("button").on('click', $("#loadMore"), function () {
+        $(this).attr('disabled', true);
+        loadContent('after');
 
-        } else if (x > by4 && x != by3) {
-        console.log(item.id, false);
-        if (by4 == 4) {
-        by3 = by4;
-        }
-        }*/
-        if (i % by4 > 0) {
-            console.log(3, i);
 
+        return false;
+    });
+    $("body").on('click', "#like", function () {
+        if ($(this).hasClass('click')) {
+            $(this).removeClass('click').text('like');;
         } else {
-            console.log(4, i);
+            $(this).addClass('click').text('unlike');
+            
         }
 
 
-
-        return tmplName;
-    }
-
-
-viewModel.myMessage("Hello, world!"); // Text appears
-
-viewModel.priceRating = ko.computed(function () {
-    return this.price() > 50 ? "expensive" : "affordable";
-}, viewModel);
-
-viewModel.details ="<em>For further details, view the report <a href='report.html'>here</a>.</em>";
-
-viewModel.customClass = 'makeBlue';
-
-
-
-
-ko.applyBindings(viewModel);
+        return false;
+    });
+});
