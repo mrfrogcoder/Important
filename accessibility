@@ -2218,7 +2218,7 @@ Accessibility.HSBC.NOWRefresh = function () {
 Accessibility.HSBC.NOWRefresh.prototype = {
     Init: function () {
         var _self = this;
-        _self.addEventFocus();
+        _self.addEventKeyDown();
        
     },
     addEventFocus: function () {
@@ -2232,17 +2232,53 @@ Accessibility.HSBC.NOWRefresh.prototype = {
         //    _self.register.focused = false;
         //};
 
-        $(document).on('focusin', 'a', function (event) {
-            var o = $(this);
-            _self.handleEvent(event,o);
-        }).on('focusout', 'a', function (event) {
-            var o = $(this);
-            _self.handleEvent(event,o);
+        //$(document).on('focusin', 'a', function (event) {
+        //    var o = $(this);
+        //    _self.handleEvent(event,o);
+        //}).on('focusout', 'a', function (event) {
+        //    var o = $(this);
+        //    _self.handleEvent(event,o);
+        //});
+    },
+    addEventKeyDown: function () {
+        var _self = this;
+        $(document).on('keydown', function (event) {
+            var e = event || window.event;
+            var target = e.target || e.srcElement;
+            var keyCode = (e.keyCode ? e.keyCode : e.which);
+
+            //tracking....
+            console.log('isfocused ' + _self.register.isFocused);
+
+            switch (keyCode) {
+                case 9:
+                    //s
+                    var options = {
+                        currentTarget: target,
+                        e: e
+                    };
+                    
+                    _self.tab(options)
+                    //e
+                    break;
+                case 27:
+                    //s
+                    console.log("Reset all keyboard functions");
+                    _self.register.isTabPressed = false;
+                    //e
+                    break;
+                default:
+                    console.log(target, keyCode);
+                 
+            }
+           
         });
+
     }
 };
 Accessibility.HSBC.NOWRefresh.prototype.register = {
     isFocused: false,
+    isTabPressed: false,
     wait: undefined,
     currentElement: undefined,
     addEventListener: function (o) {
@@ -2274,8 +2310,29 @@ Accessibility.HSBC.NOWRefresh.prototype.handleEvent = function (e, o) {
     _self.register.addEventListener(o);
     _self.register.wait = setTimeout(_self.register.removeEventListener , 200);
 };
+Accessibility.HSBC.NOWRefresh.prototype.tab = function (options) {
+    var _self = this;
+    if (_self.register.isTabPressed==false) {
+        var e = options.e;
+        e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
+        e.preventDefault();
+        _self.register.isTabPressed = true;
+        //show the skip navigation
+        console.log("Skip Navigation show!");
 
 
+        $(document).delegate("*", "focus blur", function () {
+            var elem = $(this);
+            setTimeout(function () {
+                elem.toggleClass("accessibility-item", elem.is(":focus"));
+            }, 0);
+        });
+        console.log(options);
+    }
+   
+  
+    
+};
 
 $(function () {
     var accessbility = new Accessibility.HSBC.NOWRefresh();
