@@ -1,0 +1,206 @@
+////CHROME FUNCTIONS
+function warn(msg){
+	return console.warn(msg);
+}
+function log(msg){
+	return console.log(msg);	
+}
+function info(msg){
+	return console.info(msg);
+}
+function start(){
+	console.time("app start"); 
+}
+function end(){
+	console.timeEnd("app start");
+}
+////CHROME FUNCTIONS
+
+var DURATION = 100;
+var movingId = 0;
+var prevFocused = null;
+var isFirstFocus = true;
+var keyDownTime = 0;
+var checkEvent = true,
+throttle = function(func, delay){
+if (checkEvent) { window.clearTimeout(checkEvent); }
+checkEvent = window.setTimeout(func, delay);
+};
+$(document).ready(function(e) {
+
+
+
+
+var tooltipSettings = {
+      position: {
+        my: "center bottom",
+        at: "center top",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow" )
+            .addClass( feedback.vertical )
+            .addClass( feedback.horizontal )
+            .appendTo( this );
+		
+        }
+      },
+	     tooltipClass: "custom-tooltip-styling" 
+    };
+	$( document ).tooltip(tooltipSettings);
+
+	(function() {
+		
+		var htmlBody = $("body");
+		var skipToolbar = $('.skip-navigation');
+		var isTabPressed = false;
+	  
+		var skipIndicator = $('<div class="positionDiv" id="position1"></div>');
+		$(document).on('keydown',function(e){
+			
+			var code = e.keyCode;
+			if(code === 9 || (code > 36 && code < 41) && isTabPressed===false){
+				keyDownTime = now();
+				
+				isTabPressed = true;
+				if(!$(".positionDiv").length){
+					skipIndicator.appendTo("body");
+					console.log("create");
+					
+				}else{
+					console.log("exists");;
+				}
+				
+				skipToolbar.show().focus();
+			}
+			else if(code === 27){
+				$("body a:first").focus();
+				if($(".positionDiv").length) {($(".positionDiv").remove())};
+				document.activeElement.blur();	
+				
+			}
+			
+		});
+		
+		
+		
+		
+		skipToolbar.find("a").each(function(index, element) {
+        	var el = $(element);    
+			
+				el.on("click",function(){
+					var skipTo = $(this).data("skip");
+					$("[data-accessibility-navigation="+skipTo+"] :focusable").eq(0).focus();
+					return false;
+				});
+        });
+		
+		
+		
+		
+		
+		$(document).on('focusin',function(e){
+		//	console.time("focusin start");
+			var target = e.target,
+				$target = $(target),
+				hasTooltip =  $target.data().hasOwnProperty("accessibilityTooltip") || false;
+				
+			if(isTabPressed){
+				
+				if(skipToolbar.length > 0 && $target.parent().hasClass("skip-navigation")){
+					
+				}	
+			}	
+			if(hasTooltip){
+				/*$target.tooltip({
+				content: $target.data("accessibilityTooltip"),
+				 position: {
+					my: "center bottom-20",
+					at: "center top",
+					using: function( position, feedback ) {
+					  $( this ).css( position );
+					  $( "<div>" )
+						.addClass( "arrow" )
+						.addClass( feedback.vertical )
+						.addClass( feedback.horizontal )
+						.appendTo( this );
+       			 }
+				 }
+				 });*/
+			}
+	/*		 throttle(function() {
+			
+				$( "#position1" ).position({
+				my: "top+10px" ,
+				at: "center",
+				of: $target,
+				collision: 'fit',
+				using: function(css, calc) {
+				//$(this).animate(css, 200, "linear");
+				}
+			    }).text($(target).data('accessibilityTooltip')).show();
+				
+			},100);*/
+			
+			
+			htmlBody.addClass("skip");
+			
+			
+			
+			if (isFirstFocus) {
+				isFirstFocus = false;
+				return;
+			}	
+			
+			if (now() - keyDownTime > 42) {
+				return;
+			}
+			
+			onEnd();
+		
+			
+			prevFocused = $target;
+			
+			movingId = setTimeout(onEnd, DURATION);
+		
+		});
+		
+		$(document).on('blur focusout',function(e){
+			onEnd();
+		});
+		
+		function onEnd() {
+			if (!movingId) {
+				return;
+			}
+			clearTimeout(movingId);
+			movingId = 0;
+
+		}
+		
+		function now() {
+			return new Date().valueOf();
+		}
+	})(jQuery);
+});
+
+
+
+$(document).ready(function() {
+    var elements = $(".skip-navigation a");
+    var n = elements.length;
+    elements
+    .keydown(function(event){
+        if (event.keyCode == 9) { //if tab
+            var currentIndex = elements.index(this);
+			
+            var newIndex = event.shiftKey ? (currentIndex - 1) % n : (currentIndex + 1) % n;
+            var el = elements.eq(newIndex);
+            if (el.attr("type") == "text")
+                elements.eq(newIndex).select();
+            else
+                elements.eq(newIndex).focus();
+            event.preventDefault();
+        }
+    }).eq(0).focus();
+});
