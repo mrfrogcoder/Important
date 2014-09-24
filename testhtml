@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Accessibility Application</title>
+<style>
+.expander {
+	width: 100%;
+}
+.expander .l-content {
+	width: 70%;
+	float: left;
+}
+.expander .r-content {
+	width: 30%;
+	float: left;
+}
+.expander .footer {
+	clear: both;
+	display: block;
+	width: 100%;
+}
+.hello {
+	background: green;
+	color: white;
+}
+/* LINKS */
+.skip a:link, .skip a:visited, .skip a:link, .skip a:visited {
+	color: #20399D;
+	outline: 0;
+	-webkit-transition: background-color .25s linear;
+	transition: background-color .25s linear;
+}
+.skip a:active, .skip a:focus, .skip a:hover, .skip a:active, .skip a:focus, .skip a:hover {
+	/*	color: white !important;
+	text-decoration: underline !important;
+	background-color: #1f881c !important*/background-color: #ffffcc !important;
+	color: #BF1722;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ccc;
+	outline: none;
+	border-radius: 5px;
+}
+/* Flying focus */
+
+/* Flying focus */
+#flying-focus {
+	position: absolute;
+	margin: 0;
+	background: transparent;
+	-webkit-transition-property: left, top, width, height, opacity;
+	transition-property: left, top, width, height, opacity;
+	-webkit-transition-timing-function: cubic-bezier(0, 0.2, 0, 1);
+	transition-timing-function: cubic-bezier(0, 0.2, 0, 1);
+	visibility: hidden;
+	pointer-events: none;
+	box-shadow: 0 0 2px 3px #78aeda, 0 0 2px #78aeda inset;
+	border-radius: 2px;
+}
+#flying-focus.flying-focus_visible {
+	visibility: visible;
+	z-index: 9999;
+}
+.flying-focus_target {
+	outline: none !important; /* Doesn't work in Firefox :( */
+}
+/* http://stackoverflow.com/questions/71074/how-to-remove-firefoxs-dotted-outline-on-buttons-as-well-as-links/199319 */
+.flying-focus_target::-moz-focus-inner {
+ border: 0 !important;
+}
+/* Replace it with @supports rule when browsers catch up */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+#flying-focus {
+	box-shadow: none;
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -3px;
+}
+}
+.skip-navigation {
+	display: block;
+}
+.positionDiv {
+	position: absolute;
+	width: 75px;
+	height: 75px;
+	background: green;
+	display: none;
+}
+
+  .ui-tooltip, .arrow:after {
+    background: black;
+    border: 2px solid white;
+  }
+  .ui-tooltip {
+    padding: 10px 20px;
+    color: white;
+    border-radius: 20px;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    /*text-transform: uppercase;
+    box-shadow: 0 0 7px black;*/
+	
+  }
+
+  .arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: -16px;
+	background: url('http://usvhilshpd09.us.hsbc/_catalogs/masterpage/css/images/focus-indicator-top.fw.png') no-repeat center;
+  }
+  .arrow.top {
+    top: -13px;
+    bottom: auto;
+  }
+  .arrow.left {
+    left: 20%;
+  }
+  .custom-tooltip-styling {
+	background:green !important;
+	border:none !important;
+	font-size: 11px !important;
+	color: #ffffff !important;
+	font-weight:normal !important;
+  }
+/*  .arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .arrow.top:after {
+    bottom: -20px;
+    top: auto;
+  }*/
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  <script src="apps.js"></script>
+</head>
+<body>
+
+<div class="skip-navigation"> <a href="#" data-skip="navigation" data-accessibility-tooltip="I'm Navigation" title="Navigation">Navigation</a> <a href="#" data-skip="content" data-accessibility-tooltip="I'm content"  title="Navigation">Content</a> <a href="#" data-skip="footer"  title="Navigation" data-accessibility-tooltip="I'm Footer">Footer</a> </div>
+<div class="expander">
+  <div data-accessibility-navigation="navigation"> <a href="#" data-accessibility-tooltip="High I'm Nav 1"  title="Navigation">nav 1</a> <a href="#" title="Navigation">nav 2</a> <a href="#" title="Navigation">nav 3</a> <a href="#">nav 4</a> </div>
+  <div class="l-content" data-accessibility-navigation="content">
+    <p tabindex="0" data-accessibility-tooltip="I'm Navigation" title="Press ENTER to stop banner">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae interdum ante. Etiam faucibus elit at diam sollicitudin suscipit. Aliquam nec sapien eu libero imperdiet lacinia a eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras scelerisque leo felis, lobortis eleifend nunc tempus in. Donec eros augue, luctus maximus ante quis, iaculis consequat nisl. Fusce porta vulputate hendrerit. </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<a href="#"> Etiam vitae interdum ante. Etiam faucibus elit at diam sollicitudin</a> suscipit. Aliquam nec sapien eu libero imperdiet lacinia a eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras scelerisque leo felis, lobortis eleifend nunc tempus in. Donec eros augue, luctus maximus ante quis, iaculis consequat nisl. Fusce porta vulputate hendrerit. </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae interdum ante. Etiam faucibus elit at diam sollicitudin suscipit. Aliquam nec sapien eu libero imperdiet lacinia a eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras scelerisque leo felis, lobortis eleifend nunc tempus in. Donec eros augue, luctus maximus ante quis, iaculis consequat nisl. Fusce porta vulputate hendrerit. </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae interdum ante. Etiam faucibus elit at diam sollicitudin suscipit. Aliquam nec sapien eu libero imperdiet lacinia a eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras scelerisque leo felis, lobortis eleifend nunc tempus in. Donec eros augue, luctus maximus ante quis, iaculis consequat nisl. Fusce porta vulputate hendrerit. </p>
+  </div>
+  <div class="r-content">
+    <p> <a href="#" title="Press ENTER to stop banner">nav 1</a> <a href="#">nav 2</a> <a href="#">nav 3</a> <a href="#">nav 4</a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae interdum ante. Etiam faucibus elit at diam sollicitudin suscipit. Aliquam nec sapien eu libero imperdiet lacinia a eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras scelerisque leo felis, lobortis eleifend nunc tempus in. Donec eros augue, luctus maximus ante quis, iaculis consequat nisl. Fusce porta vulputate hendrerit. </p>
+  </div>
+  <div class="footer" data-accessibility-navigation="footer"> <a href="#" title="Press ENTER to stop banner">nav 1</a> <a href="#">nav 2</a> <a href="#">nav 3</a> <a href="#">nav 4</a> </div>
+</div>
+ 
+
+</body>
+</html>
