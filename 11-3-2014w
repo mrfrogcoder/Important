@@ -1,0 +1,333 @@
+$.extend({
+	json2array : function(obj){
+		var result = [];
+		$.each( obj, function( key, value ) {
+			 result.push(key ,value);
+		});
+   	    return result;
+	}
+});
+(function( $ ){
+	var defaults = {
+		onTracking : function() {},
+		params: {
+			'DCS.dcssip': "www.helllo.com",
+			'DCS.dcsuri':'/solutions/default.asp',
+			'DCS.dcsqry':'tab=Products'
+		},
+		onDeepCopy: false,
+		callback: function() {}
+	};
+	
+	var WT  = $.wt = function () {
+			WT.open.apply( this, arguments );
+			
+	};
+	// We can use the extend method to merge options/settings as usual:
+    // But with the added first parameter of TRUE to signify a DEEP COPY:
+//	var settings = $.extend( true, {}, defaults );
+	
+	$.extend(WT,{
+		open: function(opts){
+			var  settings = $.extend(true, defaults,  opts );
+		
+			console.log(this)
+			settings.callback.apply(this);
+			return this;
+		}	
+	});
+    var methods = {
+        init : function(options , callback) {
+			
+			 debug( this );
+		     var  settings = $.extend(options.onDeepCopy || false,defaults,  options );
+			 console.log("wt default parameter objects: " , settings.params);
+			 callback.call(this, options);
+			 return this;
+        },
+        apply : function(options) {  
+			 //settings = $.extend( true,settings, options );
+		
+			 $(this).each(function(index,el) {
+					$(el).on('click',function(e){
+					 var settings = $.extend( defaults,  options );
+					 
+					 
+						console.log("click",$.json2array(settings.params));
+						//callback
+						
+						dcsMultiTrack.apply(this,$.json2array(settings.params));
+					    settings.onTracking.call(this);
+
+						return false;
+					});
+			 });
+			 return this; 
+		},// IS
+        hide : function( ) {  },// GOOD
+        showParams : function( content ) {  
+			//console.log(defaults.params);
+			return this;
+		}
+		
+    };
+	
+	
+	// Plugin definition.
+    $.fn.wt = function(methodOrOptions) {
+
+        if ( methods[methodOrOptions] ) {
+            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
+            // Default to "init"
+            return methods.init.apply( this, arguments );
+        } else {
+            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.wt' );
+        }    
+    };
+	
+	// Private function for debugging.
+	function debug( obj ) {
+        if ( window.console && window.console.log ) {
+            window.console.log( "wt selection count: " + obj.length );
+        }
+    };
+	
+	
+
+})( jQuery );
+/*!
+ * jQuery lightweight plugin boilerplate
+ * Original author: @ajpiano
+ * Further changes, comments: @addyosmani
+ * Licensed under the MIT license
+ */
+ 
+ 
+// the semi-colon before the function invocation is a safety
+// net against concatenated scripts and/or other plugins
+// that are not closed properly.
+;(function ( $, window, document, undefined ) {
+ 
+    // undefined is used here as the undefined global
+    // variable in ECMAScript 3 and is mutable (i.e. it can
+    // be changed by someone else). undefined isn't really
+    // being passed in so we can ensure that its value is
+    // truly undefined. In ES5, undefined can no longer be
+    // modified.
+ 
+    // window and document are passed through as local
+    // variables rather than as globals, because this (slightly)
+    // quickens the resolution process and can be more
+    // efficiently minified (especially when both are
+    // regularly referenced in our plugin).
+ 
+    // Create the defaults once
+    var pluginName = "defaultPluginName",
+        defaults = {
+            propertyName: "value"
+        };
+ 
+    // The actual plugin constructor
+    function Plugin( element, options ) {
+        this.element = element;
+ 
+        // jQuery has an extend method that merges the
+        // contents of two or more objects, storing the
+        // result in the first object. The first object
+        // is generally empty because we don't want to alter
+        // the default options for future instances of the plugin
+        this.options = $.extend( {}, defaults, options) ;
+ 
+        this._defaults = defaults;
+        this._name = pluginName;
+ 
+        this.init();
+    }
+ 
+    Plugin.prototype.init = function () {
+        // Place initialization logic here
+        // We already have access to the DOM element and
+        // the options via the instance, e.g. this.element
+        // and this.options
+    };
+ 
+    // A really lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if ( !$.data(this, "plugin_" + pluginName )) {
+                $.data( this, "plugin_" + pluginName,
+                new Plugin( this, options ));
+            }
+        });
+    }
+ 
+})( jQuery, window, document );
+
+
+/* [URL] */
+;(function(defaults, $, window, document, undefined) {
+
+	'use strict';
+
+	$.extend({
+		// Function to change the default properties of the plugin
+		// Usage:
+		// jQuery.pluginSetup({property:'Custom value'});
+		webtrendsSetup : function(options) {
+			return $.extend(defaults, options);
+		}
+	}).fn.extend({
+		// Usage:
+		// jQuery(selector).pluginName({property:'value'});
+		webtrends : function(options) {
+
+			options = $.extend(true,{}, defaults, options);
+			
+			return $(this).each(function() {
+				
+			console.log(options.parameters);
+			
+			 options.callback.call(this);
+     		// Plugin logic
+				// Calling the function:
+				// jQuery(selector).pluginName(options);
+			});
+		},
+		otherMethod : function() {
+			console.log("test",defaults);
+			// Some logic
+			// Calling the function:
+			// jQuery(selector).otherMethod(options);
+			return this;
+		}
+	});
+})({
+	property : '',
+	callback: function() {},
+	otherProperty : "value"
+}, jQuery, window, document);
+
+
+
+$.fn.wt.defaults = {
+ onTracking : function() {}
+};
+
+$.fn.wt.format = function( txt ) {
+    return "<b>" + txt + "</b>";
+};
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Webtrends jQuery Plugins</title>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="//localhost/MI/webtrends.js"></script>
+<script src="webtrends.jquery.v0.0.1.js"></script>
+<script>
+$(document).ready(function(){
+
+/*	$("#idLink").wt("apply",{
+
+		params: {
+			"DCS.dcssip": "www.facebook.com",
+			"WT.dl": "99"
+		}
+	,onDeepCopy : true
+	});
+	
+	
+	$(".nav").find("a").wt("apply");
+	
+	
+	$(document).wt("showParams");
+	
+	$.wt.open("callback",function(){
+		alert(1);	
+	});*/
+	
+	$.webtrendsSetup({
+		parameters: {
+			'DCS.dcssip': "www.helllo.com",
+			'DCS.dcsuri':'/solutions/default.asp',
+			'DCS.dcsqry':'tab=Products'	
+		},
+		otherProperty: "newValue"	
+	});
+
+	
+	
+	
+	$("a").webtrends({
+		property: "Hello I'll be replaced by callbacks",
+		callback: function(){
+		$.webtrendsSetup()[$(this).text()] = 1;
+			$(this).webtrends({
+				parameters :{ 'DCS.dcssip': $(this).text()}
+			});
+			
+				console.log("Webtrends current setup : " , $.webtrendsSetup());
+		}
+		
+		
+	});
+	
+
+});
+</script>
+</head>
+
+<body>
+<ul class="nav">
+  <li><a href="#">Link one</a></li>
+  <li><a href="#">Link two</a></li>
+  <li><a href="#">Link three</a></li>
+  <li><a href="#">Link four</a></li>
+</ul>
+<p>Link P</p>
+<br>
+<a href="#" id="idLink">Link by ID</a>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
