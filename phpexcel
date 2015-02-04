@@ -1,0 +1,69 @@
+<?php
+require_once 'Classes/PHPExcel.php';
+require_once 'Classes/PHPExcel/IOFactory.php';
+require_once('parsecsv.lib.php');
+
+
+$csv = new parseCSV();
+
+$csv->parse('_books.csv');
+// Create new PHPExcel object
+$objPHPExcel = new PHPExcel();
+
+// Create a first sheet, representing sales data
+$objPHPExcel->setActiveSheetIndex(0);
+
+
+$myArray =array(1=>array('Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver','Schwarz', 'Oliver'));
+
+           // csv header
+
+// 2 dimensional array with data for csv (according to header)
+
+
+	$csvData = array();
+
+	$csvHeader = array('Rating', 'Title');   
+	foreach ($csv->data as $key => $row):
+	
+	//echo $row['title'];
+	array_push($csvData,array($row['rating'],$row['title']));
+	endforeach;
+	array_unshift($csvData,$csvHeader);
+	
+//$objPHPExcel->getActiveSheet()->getStyle('1:1')->getFont()->setBold(true);
+
+$styleArray = array(
+    'font'  => array(
+        'bold'  => true,
+        'color' => array('rgb' => 'FF0000'),
+        'size'  => 15,
+        'name'  => 'Verdana'
+    ));
+
+
+$objPHPExcel->getActiveSheet()->getStyle('1:1')->applyFromArray($styleArray);
+
+
+$objPHPExcel->getActiveSheet()->fromArray($csvData, null, 'A1');
+//$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Something');
+
+// Rename sheet
+$objPHPExcel->getActiveSheet()->setTitle('Jong');
+
+// Create a new worksheet, after the default sheet
+$objPHPExcel->createSheet();
+
+// Add some data to the second sheet, resembling some different data types
+$objPHPExcel->setActiveSheetIndex(1);
+$objPHPExcel->getActiveSheet()->setCellValue('A1', 'More data');
+
+// Rename 2nd sheet
+$objPHPExcel->getActiveSheet()->setTitle('Van');
+
+// Redirect output to a client’s web browser (Excel5)
+header('Content-Type: application/vnd.ms-excel');
+header('Content-Disposition: attachment;filename="name_of_file.xls"');
+header('Cache-Control: max-age=0');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+$objWriter->save('php://output');
